@@ -161,6 +161,7 @@ public class Entry
     {
         return vineyard;
     }
+    //@TODO: Add in sets and gets for all fields to allow editing.
 }
 
 class Comment
@@ -176,6 +177,8 @@ class Comment
         DateFormat df = new SimpleDateFormat("h:mma MM/dd/yyyy");
         Date dt = new Date();
         this.date = df.format(dt);
+        Date date = new Date();
+        this.date = df.format(date);
         
     }
     
