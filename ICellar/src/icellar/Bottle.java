@@ -21,7 +21,7 @@ public class Bottle
     private String year;
     private String region;
     private String vineyard;
-    private int rating;
+    private double rating;
     private int countRatings;
     private ArrayList<Comment> comments;
     
@@ -101,7 +101,7 @@ public class Bottle
      * 
      * @param rating    the new rating
      */
-    public void setRating( int rating )
+    public void setRating( double rating )
     {
         this.rating = rating;
     }
@@ -110,7 +110,7 @@ public class Bottle
      * 
      * @return  the current rating of the {@link Bottle}
      */
-    public int getRating()
+    public double getRating()
     {
         return rating;
     }
@@ -124,6 +124,11 @@ public class Bottle
     public boolean addComment( String comment, String user )
     {
         return this.comments.add( new Comment ( comment, user ) );
+    }
+    
+    public boolean addComment( Comment cm )
+    {
+        return this.comments.add( cm );
     }
     
     /**
@@ -292,9 +297,31 @@ public class Bottle
      */
     public int compareRating( Bottle btl )
     {
-        Integer rate = this.rating;
-        Integer compare = btl.getRating();
+        Double rate = this.rating;
+        Double compare = btl.getRating();
         return rate.compareTo( compare );
+    }
+    
+    public Comment getLatestComment()
+    {
+        if ( comments.size() > 0 )
+        {
+            return comments.get(comments.size()-1);
+        }
+        else
+        {
+            return new Comment("","");
+        }
+    }
+    
+    /**
+     * Builds an array of {@link String}s for exporting onto a table.
+     * @return  an array of {@link String}s that represent the bottle in text.
+     */
+    public String[] toStringArray()
+    {
+        String[] result = { this.maker, this.type, this.year, this.region, this.vineyard, "" + this.rating, this.getLatestComment().getText() };
+        return result;
     }
     
     @Override
@@ -317,7 +344,13 @@ public class Bottle
     @Override
     public String toString()
     {
-        return this.maker + " " + this.type + " " + this.year;
+        String result = "";
+        result += this.maker + " | " + this.type + " | " + this.year + " | " + this.region + " | " + this.vineyard + " | " + this.rating + " | ";
+        for ( Comment cm : comments )
+        {
+            result += " ~ " + cm.getDate() + "-" + cm.getUser() + "-" + cm.getText();
+        }
+        return result;
     }
 }
 
@@ -326,6 +359,13 @@ class Comment
     private String text;
     private String user;
     private String date;
+    
+    public Comment ( String date, String user, String text )
+    {
+        this.date = date;
+        this.user = user;
+        this.text = text;
+    }
     
     public Comment ( String text, String user )
     {
@@ -373,6 +413,7 @@ class Comment
         return this.date.compareTo( otherComment.getDate() );
     }
     
+    @Override
     public String toString()
     {
         return this.user + " said \"" + this.text + "\" on " + this.date;

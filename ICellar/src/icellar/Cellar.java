@@ -1,6 +1,9 @@
 package icellar;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -10,10 +13,22 @@ public class Cellar {
 
     private ArrayList<Bottle> bottles;
 
-    public Cellar() {
+    public Cellar() 
+    {
         bottles = new ArrayList<Bottle>();
     }
-
+    
+    public Cellar( String filepath )
+    {
+        bottles = new ArrayList<Bottle>();
+        this.buildFromFile(filepath);
+    }
+    
+    public boolean addBottle( Bottle btl )
+    {
+        return bottles.add(btl);
+    }
+    
     /**
      * Adds a Bottle to the cellar.
      * 
@@ -489,5 +504,55 @@ public class Cellar {
             result += btl.toString() + "\n";
         }
         return result;
+    }
+    
+    /**
+     * Builds a 2D Array of {@link String}s that is used to export bottle info to the table.
+     * @return  a 2D Array of {@link String}s
+     */
+    public String[][] toStringArray()
+    {
+        int i = 0;
+        String[][] result = new String[bottles.size()][7];
+        
+        for ( Bottle btl : bottles )
+        {
+           result[i] = btl.toStringArray();
+           i++;
+        }
+        
+        return result;
+    }
+    
+    private void buildFromFile( String filepath )
+    {
+        try 
+        {
+            File inFile = new File( filepath );
+            Scanner scan = new Scanner( inFile );
+            String curLine;
+            String[] fields;
+            String[] comments;
+            Bottle btl;
+            while ( scan.hasNext() )
+            {
+                curLine = scan.nextLine();
+                fields = curLine.split(",");
+                comments = fields[6].split(";");
+                
+                btl = new Bottle( fields[0], fields[1], fields[2], fields[3], fields[4] );
+                btl.setRating(Double.parseDouble(fields[5]));
+                for ( String cm : comments )
+                {
+                    String[] arr = cm.split( "-" );
+                    btl.addComment(new Comment( arr[0], arr[1], arr[2]));
+                }
+                bottles.add(btl);
+            }
+        } 
+        catch (FileNotFoundException ex) 
+        {
+            System.err.println( ex );
+        }
     }
 }
