@@ -79,6 +79,7 @@ public class mainmenuGUI extends JFrame {
 
                             InportUserAccount fileReader2 = new InportUserAccount();
                             File curFile2 = new File(new File("wineData/Account.txt").getAbsolutePath());
+                            //pulls the list of all users from the server
 
                             userAccounts = fileReader2.fileReader(curFile2);
 
@@ -87,6 +88,7 @@ public class mainmenuGUI extends JFrame {
                             while(userAccounts[0][i] != null){
 
                                 if(userAccounts[0][i].equals(textField.getText()) == true){
+                                    //checks to make such the user exists
 
                                     userExt = "true";
                                     break;
@@ -110,14 +112,13 @@ public class mainmenuGUI extends JFrame {
 
                                     if((accounts[i][2].equals("userName: " + textField.getText()))&&(accounts[i][3].equals("password: " + textField_1.getText()))){
 
-                                        //System.out.println(textField.getText() + " has logged in.");
                                         
                                         CurSession loginSession = new CurSession();
                                         loginSession.loginSession(textField.getText(), textField_1.getText());
 
                                         frame.dispose();
 
-                                        try{
+                                        try{//sets up the display if a user creates a account for the bottle inventory
                                             iCellarGUI frame2 = new iCellarGUI();
                                             frame2.setVisible(true);
                                         }
@@ -147,6 +148,7 @@ public class mainmenuGUI extends JFrame {
 		btnLogin.setBounds(10, 118, 89, 23);
 		contentPane.add(btnLogin);
 
+                //start of all the fields on the main menu
 		JLabel lblSignUp = new JLabel("Sign Up:");
 		lblSignUp.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblSignUp.setBounds(264, 41, 64, 14);
@@ -197,11 +199,12 @@ public class mainmenuGUI extends JFrame {
 		contentPane.add(textField_6);
 		textField_6.setColumns(10);
 
-		JButton btnSignUp = new JButton("Sign Up");
+		JButton btnSignUp = new JButton("Sign Up");//action for setting up a new account
 		btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
                             InportAccount fileReader = new InportAccount();
+                            //all current accounts are read in to prevent the same user name being picked
                             File curFile = new File(new File("wineData/Account.txt").getAbsolutePath());
                             accounts = fileReader.fileReader(curFile);
 
@@ -220,7 +223,7 @@ public class mainmenuGUI extends JFrame {
                                 int i = 0;
                                 while(accounts[0][i].equals(textField_2.getText()) == false){//goes to each account breaks if there is a repeated username
 
-                                    if((accounts[0][i+1] == null)&&(accounts[0][i].equals(textField_2.getText()) == false)){//makes sure the current one is not a repeat
+                                    if((accounts[0][i+1] == null)&&(accounts[0][i].equals(textField_2.getText()) == false)){//if so makes the new user account, adds the user name to the list of all users, and creates the users bottle file
 
                                         MakeAccount accountMaker = new MakeAccount();
 
@@ -254,7 +257,7 @@ public class mainmenuGUI extends JFrame {
 	}
 }
 
-class InportAccount{//reads all the current users in wineData/Account.txt
+class InportAccount{//reads all the current users in wineData/Account.txt and sets each account to a array
 
     public String[][] fileReader (File fileName){
 
@@ -334,7 +337,7 @@ class MakeAccount{//creats the new user, adds the username to wineData/Account.t
     }
 }
 
-class InportAccount2{//reads all the current users in wineData/Users/"username".txt
+class InportAccount2{//like the ImportAccount however changes the array fields to allow for the bottle array
 
     public String[][] fileReader (File fileName){
 
@@ -366,7 +369,7 @@ class InportAccount2{//reads all the current users in wineData/Users/"username".
     }
 }
 
-class InportUserAccount{//reads all the current users in wineData/Account.txt
+class InportUserAccount{//Reads in the users and creates an array to house all the info linked to the given user
 
     public String[][] fileReader (File fileName){
 

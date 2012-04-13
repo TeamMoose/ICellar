@@ -5,7 +5,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.*;
 
-
+//This frame is pulled up when the search button is clicked.
+//It allows the user to search personal and group inventory
+//based on entered criteria.
 public class searchInventoryGUI extends JFrame {
 
 	private searchInventoryGUI frame;
@@ -41,6 +43,7 @@ public class searchInventoryGUI extends JFrame {
 		lblMaker.setBounds(10, 75, 64, 14);
 		contentPane.add(lblMaker);
 		
+		//Enter maker to search for here.
 		textField = new JTextField();
 		textField.setBounds(91, 72, 183, 20);
 		contentPane.add(textField);
@@ -51,6 +54,7 @@ public class searchInventoryGUI extends JFrame {
 		lblType.setBounds(10, 100, 46, 14);
 		contentPane.add(lblType);
 		
+		//Enter type to search for here.
 		textField_1 = new JTextField();
 		textField_1.setBounds(91, 97, 183, 20);
 		contentPane.add(textField_1);
@@ -76,26 +80,32 @@ public class searchInventoryGUI extends JFrame {
 		lblRating.setBounds(10, 200, 46, 14);
 		contentPane.add(lblRating);
 		
+		//Enter year to search for here.
 		textField_2 = new JTextField();
 		textField_2.setBounds(91, 122, 46, 20);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 		
+		//Enter vineyard to search for here.
 		textField_3 = new JTextField();
 		textField_3.setBounds(91, 147, 183, 20);
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
 		
+		//Enter region to search for here.
 		textField_4 = new JTextField();
 		textField_4.setBounds(91, 172, 183, 20);
 		contentPane.add(textField_4);
 		textField_4.setColumns(10);
 		
+		//Enter rating to search for here.
 		textField_5 = new JTextField();
 		textField_5.setBounds(91, 197, 46, 20);
 		contentPane.add(textField_5);
 		textField_5.setColumns(10);
 		
+		//Click this button returns you to the hub menu and displays the bottles that meet
+		//your search criteria.
 		JButton btnSaveAndExit = new JButton("Search");
 		btnSaveAndExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

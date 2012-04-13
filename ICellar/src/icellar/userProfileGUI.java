@@ -71,6 +71,10 @@ public class userProfileGUI extends JFrame {
 		label_1.setBounds(102, 111, 82, 14);
 		contentPane.add(label_1);
 
+                /*
+                 * This action will change the user's password for whatever
+                 * reason that they may have.
+                 */
 		JButton btnChangePassword = new JButton("Change Password");
 		btnChangePassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -96,7 +100,11 @@ public class userProfileGUI extends JFrame {
 		
 		label_2.setBounds(102, 170, 82, 14);
 		contentPane.add(label_2);
-
+                
+                /*
+                 * This action will change the user's email address for whatever
+                 * reason that may occur.
+                 */
 		JButton btnChangeEmail = new JButton("Change Email");
 		btnChangeEmail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -123,6 +131,10 @@ public class userProfileGUI extends JFrame {
 		label_3.setBounds(102, 229, 82, 14);
 		contentPane.add(label_3);
 
+                /*
+                 * This option will allow the user to change their name
+                 * for whatever reason that may occur. 
+                 */
 		JButton btnChangeName = new JButton("Change Name");
 		btnChangeName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -149,6 +161,10 @@ public class userProfileGUI extends JFrame {
 		label_4.setBounds(102, 288, 82, 14);
 		contentPane.add(label_4);
 
+                /*
+                 * The following will allow the user to logout. Clicking/pressing
+                 * the button will take the user to the sign in screen.
+                 */
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -232,7 +248,11 @@ class ImportAccount{//reads all the current users in wineData/Account.txt
         return wordList;
     }
 }
-
+/*
+ * This class will allow a user to update their info for whatever
+ * reason they may need to. It will utilize a file that contains all user
+ * data. Once changes are made, the data will be changed in the file.
+ */
 class UpdateUserInfo{
 
     public void update (String[][] info, String user){

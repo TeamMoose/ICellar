@@ -12,7 +12,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 
-
+//This class contains the frame for the 'hub' of iCellar
 public class iCellarGUI extends JFrame {
 
 	private static iCellarGUI frame;
@@ -34,11 +34,13 @@ public class iCellarGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
+		
+		//Add tabs
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 67, 864, 484);
 		contentPane.add(tabbedPane);
-
+		
+		//Start with individual inventory, create a tab for it.
 		JScrollPane scrollPane = new JScrollPane();
 		tabbedPane.addTab("My Cellar", null, scrollPane, null);
 
@@ -60,6 +62,7 @@ public class iCellarGUI extends JFrame {
                 "Comment"
                 };
 
+		//Create a new table for the personal inventory.
 		table = new JTable(bottles, columnHeaders);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ListSelectionModel lsm = table.getSelectionModel();
@@ -102,6 +105,7 @@ public class iCellarGUI extends JFrame {
             wineclubs = stringLine.split(",");
             
             int i = 1;
+            //For each group, add another tab with a scrollable table.
             while(wineclubs.length > i){
                 
             	scrollPane = new JScrollPane();
@@ -126,6 +130,7 @@ public class iCellarGUI extends JFrame {
                 int j = 1;
                 Cellar temp = new Cellar();
                 
+                //For each wine club grab each users inventory and add to collection table.
                 while(usersWineclub.length > j){
                     
                     temp.buildFromFile("wineData/Users/" + usersWineclub[j] + "Bottle.txt");                    
@@ -161,6 +166,7 @@ public class iCellarGUI extends JFrame {
             System.err.println("Error: " + e.getMessage());
         }
 
+        //Button for adding a new bottle
 		JButton btnAddBottle = new JButton("Add Bottle");
 		btnAddBottle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -175,6 +181,7 @@ public class iCellarGUI extends JFrame {
 		btnAddBottle.setBounds(494, 11, 117, 23);
 		contentPane.add(btnAddBottle);
 
+		//Button for managing clubs (join, leave create).
 		JButton btnManageClubs = new JButton("Manage Clubs");
 		btnManageClubs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -189,6 +196,7 @@ public class iCellarGUI extends JFrame {
 		btnManageClubs.setBounds(748, 37, 117, 23);
 		contentPane.add(btnManageClubs);
 
+		//Button for editing profile information.
 		JButton btnProfile = new JButton("Profile");
 		btnProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -203,6 +211,7 @@ public class iCellarGUI extends JFrame {
 		btnProfile.setBounds(748, 11, 117, 23);
 		contentPane.add(btnProfile);
 
+		//Button for removing a bottle from collection.
 		JButton btnRemoveBottle = new JButton("Remove Bottle");
 		btnRemoveBottle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -243,6 +252,7 @@ public class iCellarGUI extends JFrame {
 		btnRemoveBottle.setBounds(621, 11, 117, 23);
 		contentPane.add(btnRemoveBottle);
 
+		//Button for searching collection.
 		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -257,6 +267,7 @@ public class iCellarGUI extends JFrame {
 		btnSearch.setBounds(621, 37, 117, 23);
 		contentPane.add(btnSearch);
 
+		//Button for editing a bottle.
 		JButton btnEditBottle = new JButton("Edit Bottle");
 		btnEditBottle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -276,12 +287,16 @@ public class iCellarGUI extends JFrame {
 		btnEditBottle.setBounds(494, 37, 117, 23);
 		contentPane.add(btnEditBottle);
 		
+		//Logo label.
 		JLabel lblIcellar = new JLabel("iCellar");
 		lblIcellar.setFont(new Font("Tahoma", Font.BOLD, 24));
 		lblIcellar.setBounds(10, 11, 152, 41);
 		contentPane.add(lblIcellar);
 	}
 	
+	//This method is called whenever current user information is altered and redisplays the
+	//refreshed tables and removed or added tabs. It is basically the same code that runs when the
+	//iCellarGUI frame is initially loaded.
 	public static void updateJTable(String[][] bottles)
 	{
 		contentPane.remove(tabbedPane);
@@ -409,6 +424,8 @@ public class iCellarGUI extends JFrame {
         }     
 	}
 	
+	//This method is called after a search. It replaces the search button with an
+	//undo search button that returns the tabs and tables to their unsearched state.
 	public static void replaceSearchButton() {
 		contentPane.remove(btnSearch);
 		btnUndoSearch = new JButton("Undo Search");
