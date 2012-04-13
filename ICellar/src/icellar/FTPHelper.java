@@ -3,6 +3,7 @@ package icellar;
 import org.apache.commons.net.ftp.*;
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,7 +66,7 @@ public class FTPHelper
         return null;
     }
     
-    public static BufferedWriter getFTPOutputStream( String filepath )
+    private static BufferedWriter getFTPBufferedWriter( String filepath )
      {
         client = new FTPClient();
         try {
@@ -94,5 +95,29 @@ public class FTPHelper
             Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public static void appendToFile( String filepath, String str )
+    {
+        String append = "";
+        InputStream is = getFTPInputStream( filepath );
+        BufferedWriter bw;
+        Scanner scan = new Scanner( is );
+        
+        while ( scan.hasNext() )
+        {
+            append += scan.nextLine() + "\n";
+        }
+        
+        append += str;
+        try {
+            is.close();
+            bw = getFTPBufferedWriter( filepath );
+            bw.write(append);
+            bw.flush();
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
 }
