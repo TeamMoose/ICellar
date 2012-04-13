@@ -603,6 +603,8 @@ public class Cellar {
                 //split the fields
                 fields = curLine.split(",");
                 //split the comments
+                if(fields.length > 6 )
+                {
                 if (fields[6].contains(";"))
                 {
                 	comments = fields[6].split(";");
@@ -610,6 +612,11 @@ public class Cellar {
                 else
                 {
                 	comments = new String[] { fields[6] };
+                }
+                }
+                else
+                {
+                    comments = new String[] {};
                 }
                 //add the new bottle
                 btl = new Bottle( fields[0], fields[1], fields[2], fields[3], fields[4], Double.parseDouble(fields[5]), null );
