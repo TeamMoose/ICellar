@@ -23,23 +23,30 @@ public class editBottleGUI extends JFrame {
 
 	/**
 	 * Create the frame.
-	 */
+         * 
+         * @param c the current cellar
+         * @param n the row number of the selected row
+         */
 	public editBottleGUI(Cellar c, int n) {
+            // make the frame
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame = this;
 		myCellar = c;
 		selectedRow = n;
 		setBounds(100, 100, 300, 450);
+                //add a content pane
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+                //add title
 		JLabel lblAddBottle = new JLabel("Edit Bottle");
 		lblAddBottle.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblAddBottle.setBounds(91, 11, 97, 32);
 		contentPane.add(lblAddBottle);
 		
+                //add text fields
 		JLabel lblMaker = new JLabel("Maker: *");
 		lblMaker.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblMaker.setBounds(10, 75, 64, 14);
@@ -110,6 +117,7 @@ public class editBottleGUI extends JFrame {
 		contentPane.add(textField_6);
 		textField_6.setColumns(10);
 		
+                //populate text fields with the current values
 		String[][] strs = myCellar.toStringArray();
 		textField.setText(strs[selectedRow][0]);
 		textField_1.setText(strs[selectedRow][1]);
@@ -133,10 +141,12 @@ public class editBottleGUI extends JFrame {
 
                 curUser = fileReader.fileReader(curFile);
                 
+                //create an instance of Bottle to find in the cellar
 				String[][] strs = myCellar.toStringArray();
 				Bottle btl = new Bottle(strs[selectedRow][0],strs[selectedRow][1], strs[selectedRow][2]);
 				double rating;
                 Comment cm;
+                //sanity checking
                 if ( textField_5.getText().equals("") )
                 {
                 	rating = -1;
@@ -153,8 +163,9 @@ public class editBottleGUI extends JFrame {
                 {
                 	cm = new Comment(textField_6.getText(), curUser[0][0]);
                 }
+                                //edit the bottle on the cellar
 				myCellar.editBottle(btl,textField.getText(), textField_1.getText(), textField_2.getText(), textField_3.getText(), textField_4.getText(), rating, cm);
-				
+				//write the cellar to file
 				try {
 					File curFile2 = new File(new File("wineData/Users/" + curUser[0][0] + "Bottle.txt").getAbsolutePath());
 					

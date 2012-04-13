@@ -1,0 +1,6 @@
+email: fe
+name: Alex
+userName: Bigmazz
+password: hello
+bDay: 222
+Wineclubs: 

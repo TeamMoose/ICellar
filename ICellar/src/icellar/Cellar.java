@@ -617,6 +617,7 @@ public class Cellar {
                 for ( String cm : comments )
                 {
                     String[] arr = cm.split( "-" );
+                    if (arr.length > 1)
                     btl.addComment(new Comment( arr[0], arr[1], arr[2]));
                 }
                 bottles.add(btl);

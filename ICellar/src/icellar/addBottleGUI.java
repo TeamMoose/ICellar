@@ -21,7 +21,12 @@ public class addBottleGUI extends JFrame {
     String[][] curUser = new String[1][1];
     private Cellar myCellar;
 
-	public addBottleGUI(Cellar c) {
+    /**
+     *  The UI window used to add a bottle to the cellar
+     * @param c the current cellar
+     */
+    public addBottleGUI(Cellar c) {
+        //set up frame
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame = this;
         myCellar = c;
@@ -36,6 +41,7 @@ public class addBottleGUI extends JFrame {
 		lblAddBottle.setBounds(91, 11, 97, 32);
 		contentPane.add(lblAddBottle);
 
+                //add text fields
 		JLabel lblMaker = new JLabel("Maker: *");
 		lblMaker.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblMaker.setBounds(10, 75, 64, 14);
@@ -109,7 +115,7 @@ public class addBottleGUI extends JFrame {
 		JButton btnAddBottle = new JButton("Add Bottle");
 		btnAddBottle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+                               //sanity check
                             if(textField.getText().equals("")||textField_1.getText().equals("")||textField_2.getText().equals("")){
 
                                 JOptionPane.showMessageDialog(contentPane, "All required fields not entered.");
@@ -122,17 +128,18 @@ public class addBottleGUI extends JFrame {
                                 File curFile = new File(new File("wineData/Login/curLogin.txt").getAbsolutePath());
 
                                 curUser = fileReader.fileReader(curFile);
+                                //create the bottle to be added
                                 Bottle btl = new Bottle(textField.getText(), textField_1.getText(), textField_2.getText());
-                                if(!textField_3.getText().equals("")) btl.setVineyard(textField_3.getText());
-                                if(!textField_4.getText().equals("")) btl.setRegion(textField_4.getText());
+                                if(!textField_3.getText().equals("")) btl.setRegion(textField_3.getText());
+                                if(!textField_4.getText().equals("")) btl.setVineyard(textField_4.getText());
                                 if(!textField_5.getText().equals("")) btl.setRating(Double.parseDouble(textField_5.getText()));
                                 if(!textField_6.getText().equals("")) btl.addComment(new Comment(textField_6.getText(), curUser[0][0]));
                                 else {
-                                	btl.addComment(null);
+                                	btl.addComment(new Comment("",""));
                                 }
-                                //Bottle btl = new Bottle(textField.getText(), textField_1.getText(), textField_2.getText(),
-                                		//textField_3.getText(), textField_4.getText(), Double.parseDouble(textField_5.getText()), new Comment(textField_6.getText(), curUser[0][0]));
+                                //add the bottle to the cellar
                                 myCellar.addBottle(btl);
+                                //write the cellar to the file
                                 try {
                 					File curFile2 = new File(new File("wineData/Users/" + curUser[0][0] + "Bottle.txt").getAbsolutePath());
                 					

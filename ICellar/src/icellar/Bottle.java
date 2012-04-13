@@ -349,11 +349,19 @@ public class Bottle
     {
         String result = "";
         result += this.maker + "," + this.type + "," + this.year + "," + this.region + "," + this.vineyard + "," + this.rating + ",";
-        for ( Comment cm : comments )
+        if( comments.size() > 0 )
         {
-            result += cm.getDate() + "-" + cm.getUser() + "-" + cm.getText() + ";";
+            for ( Comment cm : comments )
+            {
+                if (cm != null)
+                result += cm.getDate() + "-" + cm.getUser() + "-" + cm.getText() + ";";
+            }
+            return result.substring(0, result.length()-1);
         }
-        return result.substring(0, result.length()-1);
+        else
+        {
+            return result;
+        }
     }
 }
 
