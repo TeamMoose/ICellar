@@ -21,7 +21,11 @@ public class ICellar
     {
         // TODO code application logic here
         Cellar cellar = new Cellar("resources/bottles.txt");
-        System.out.println(cellar);
+        String[] arr = cellar.toAndroidStringArray();
+        for (String str : arr )
+        {
+            System.out.println(str);
+        }
         
     }
 }

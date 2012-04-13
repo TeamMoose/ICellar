@@ -2,6 +2,7 @@ package icellar;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,6 +23,12 @@ public class Cellar {
     {
         bottles = new ArrayList<Bottle>();
         this.buildFromFile(filepath);
+    }
+    
+    public Cellar ( InputStream input )
+    {
+        bottles = new ArrayList<Bottle>();
+        this.buildFromFile(input);
     }
     
     public boolean addBottle( Bottle btl )
@@ -419,7 +426,7 @@ public class Cellar {
      */
     public void sortByRating() {
         Object[] arr = bottles.toArray();
-        arr = quicksortVineyard(arr, arr.length / 2);
+        arr = quicksortRating(arr, arr.length / 2);
         bottles = new ArrayList<Bottle>();
         //populate the new ArrayList with the elements in the correct order
         for (Object o : arr) {
@@ -573,5 +580,28 @@ public class Cellar {
         {
             System.err.println( ex );
         }
+    }
+    
+    private void buildFromFile( InputStream input )
+    {
+            Scanner scan = new Scanner( input );
+            String curLine;
+            String[] fields;
+            String[] comments;
+            Bottle btl;
+            while ( scan.hasNext() )
+            {
+                curLine = scan.nextLine();
+                fields = curLine.split(",");
+                comments = fields[6].split(";");
+                
+                btl = new Bottle( fields[0], fields[1], fields[2], fields[3], fields[4], Double.parseDouble(fields[5]), null );
+                for ( String cm : comments )
+                {
+                    String[] arr = cm.split( "-" );
+                    btl.addComment(new Comment( arr[0], arr[1], arr[2]));
+                }
+                bottles.add(btl);
+            }
     }
 }
