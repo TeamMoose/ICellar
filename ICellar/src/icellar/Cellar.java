@@ -1,5 +1,3 @@
-package icellar;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -52,8 +50,8 @@ public class Cellar {
      * @param vineyard  the vineyard the wine is from
      * @return          true if successful
      */
-    public boolean addBottle(String maker, String type, String year, String region, String vineyard) {
-        return bottles.add(new Bottle(maker, type, year, region, vineyard));
+    public boolean addBottle(String maker, String type, String year, String region, String vineyard, double rating, Comment cm) {
+        return bottles.add(new Bottle(maker, type, year, region, vineyard, rating, cm));
     }
 
     /**
@@ -540,8 +538,7 @@ public class Cellar {
                 fields = curLine.split(",");
                 comments = fields[6].split(";");
                 
-                btl = new Bottle( fields[0], fields[1], fields[2], fields[3], fields[4] );
-                btl.setRating(Double.parseDouble(fields[5]));
+                btl = new Bottle( fields[0], fields[1], fields[2], fields[3], fields[4], Double.parseDouble(fields[5]), null );
                 for ( String cm : comments )
                 {
                     String[] arr = cm.split( "-" );

@@ -1,5 +1,3 @@
-package icellar;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,7 +47,7 @@ public class Bottle
      * @param region    the region the wine is from; Enter null if not available
      * @param vineyard  the vineyard the wine is from; Enter null if not available
      */
-    public Bottle ( String maker, String type, String year, String region, String vineyard )
+    public Bottle ( String maker, String type, String year, String region, String vineyard, double rating, Comment cm )
     {
         this.maker = maker;
         this.type = type;
@@ -57,15 +55,18 @@ public class Bottle
         this.region = region;
         this.vineyard = vineyard;
         comments = new ArrayList<Comment>();
-        rating = 0;
+        if ( cm != null )
+        comments.add( cm );
+        this.rating = 0;
         countRatings = 0;
+        this.addRating( rating );
     }
     
     /**
      * Adds a rating to the current rating of the {@link Bottle}. Keeps the average in the rating field.
      * @param rate  the new rating to be added to the average
      */
-    public void addRating( int rate )
+    public void addRating( double rate )
     {
         //Keep the average rating in the rating variable at all times.
         
@@ -104,6 +105,7 @@ public class Bottle
     public void setRating( double rating )
     {
         this.rating = rating;
+        countRatings = 1;
     }
     
     /**
