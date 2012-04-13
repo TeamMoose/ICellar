@@ -13,13 +13,11 @@ import java.util.logging.Logger;
  */
 public class FTPHelper 
 {
-    public static FTPClient client;
-    public static final String urlProtocol = "ftp://";
-    public static final String ftpUser = "iCellar";
-    public static final String ftpPass = "1cellar!";
-    public static final String ftpSite = "ftp.reverteddesigns.com";
-    public static final String ftpEnd = ";type=i";
-    public static final String baseFilepath = "/iCellar/";
+    private static FTPClient client;
+    private static final String ftpUser = "iCellar";
+    private static final String ftpPass = "1cellar!";
+    private static final String ftpSite = "ftp.reverteddesigns.com";
+    private static final String baseFP = "/wineData/";
     
     public FTPHelper()
     {
@@ -44,6 +42,7 @@ public class FTPHelper
                 System.exit(1);
             }
             client.login(ftpUser, ftpPass, "reverteddesignscom");
+            
             return client.retrieveFileStream(filepath);
         } catch (UnknownHostException ex)
         {
@@ -91,7 +90,7 @@ public class FTPHelper
     public static void appendToFile( String filepath, String str )
     {
         String append = "";
-        InputStream is = getFTPInputStream( filepath );
+        InputStream is = getFTPInputStream( baseFP + filepath );
         BufferedWriter bw;
         Scanner scan = new Scanner( is );
         
@@ -103,7 +102,7 @@ public class FTPHelper
         append += str;
         try {
             is.close();
-            bw = getFTPBufferedWriter( filepath );
+            bw = getFTPBufferedWriter( baseFP + filepath );
             bw.write(append);
             bw.flush();
             bw.close();
@@ -114,7 +113,7 @@ public class FTPHelper
     
     public static Cellar readCellarFromFile( String filepath )
     {
-        InputStream is = getFTPInputStream( filepath );
+        InputStream is = getFTPInputStream( baseFP + filepath );
         Cellar result = new Cellar( is );
         try {
             is.close();
@@ -127,7 +126,7 @@ public class FTPHelper
     
     public static void writeCellarToFile( String filepath, Cellar myCellar )
     {
-        BufferedWriter bw = getFTPBufferedWriter( filepath );
+        BufferedWriter bw = getFTPBufferedWriter( baseFP + filepath );
         try {
             bw.write(myCellar.toString());
             bw.flush();

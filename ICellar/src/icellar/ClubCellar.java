@@ -6,6 +6,7 @@ package icellar;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,6 +28,11 @@ public class ClubCellar extends Cellar
     {
         bottles = new ArrayList<ClubBottle>();
         this.buildFromFile(filepath);
+    }
+    
+    public ClubCellar( InputStream is )
+    {
+        
     }
     
     public boolean addBottle( ClubBottle btl )
