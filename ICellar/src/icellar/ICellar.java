@@ -49,7 +49,18 @@ public class ICellar
         } catch (IOException ex) {
             Logger.getLogger(ICellar.class.getName()).log(Level.SEVERE, null, ex);
         }*/
-       // Cellar cellar = new Cellar ("resources/bottles.txt");
-        //System.out.println(cellar.getBottle(0));
+        
+        
+        Cellar cellar; //= new Cellar ("resources/bottles.txt");
+        //FTPHelper.writeCellarToFile(filepath, cellar);
+        
+        cellar = FTPHelper.readCellarFromFile(filepath);
+        System.out.println(cellar + "\n");
+        
+        FTPHelper.appendToFile(filepath, "Cottonwood Canyon,Pinot Noir,2000,Santa Ynez,Sharon's Vineyard,4.6,8:05PM 4/11/2012-AMazzeo-This is AMAZING!!!!;8:07PM 4/11/2012-CMarshall-Best wine I own!");
+        cellar = FTPHelper.readCellarFromFile(filepath);
+        
+        System.out.println(cellar);
+        
     }
 }

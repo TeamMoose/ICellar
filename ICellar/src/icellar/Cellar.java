@@ -25,6 +25,12 @@ public class Cellar {
         this.buildFromFile(filepath);
     }
     
+    public Cellar( InputStream is )
+    {
+        bottles = new ArrayList<Bottle>();
+        this.buildFromFile( is );
+    }
+    
     public boolean addBottle( Bottle btl )
     {
         return bottles.add(btl);
@@ -135,12 +141,7 @@ public class Cellar {
         
     }
 
-    /**
-     * Finds and returns a {@link Bottle} from the cellar.
-     * 
-     * @param btl   a copy of the {@link Bottle} that is being searched for.
-     * @return      a {@link Bottle} if a match is found, else null.
-     */
+    
     public String[][] search(String maker, String type, String year, String region, String vineyard, String rating ) {
         Cellar temp = new Cellar();
         for ( Bottle btl : bottles )

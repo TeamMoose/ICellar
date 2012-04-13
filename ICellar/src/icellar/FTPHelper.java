@@ -32,7 +32,6 @@ public class FTPHelper
         try {
             int reply;
             client.connect(ftpSite);
-            System.out.println("Connected to " + ftpSite + ".");
 
             // After connection attempt, you should check the reply code to verify
             // success.
@@ -44,15 +43,7 @@ public class FTPHelper
                 System.err.println("FTP server refused connection.");
                 System.exit(1);
             }
-            Boolean logged = client.login(ftpUser, ftpPass, "reverteddesignscom");
-            reply = client.getReplyCode();
-            client.changeToParentDirectory();
-            FTPFile[] directs = client.listDirectories();
-            String[] names = client.listNames();
-            for ( String str : names )
-            {
-                System.out.println(str);
-            }
+            client.login(ftpUser, ftpPass, "reverteddesignscom");
             return client.retrieveFileStream(filepath);
         } catch (UnknownHostException ex)
         {
@@ -119,5 +110,30 @@ public class FTPHelper
         } catch (IOException ex) {
             Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
         }        
+    }
+    
+    public static Cellar readCellarFromFile( String filepath )
+    {
+        InputStream is = getFTPInputStream( filepath );
+        Cellar result = new Cellar( is );
+        try {
+            is.close();
+        } catch (IOException ex) {
+            Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+        
+    }
+    
+    public static void writeCellarToFile( String filepath, Cellar myCellar )
+    {
+        BufferedWriter bw = getFTPBufferedWriter( filepath );
+        try {
+            bw.write(myCellar.toString());
+            bw.flush();
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
