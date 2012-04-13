@@ -19,11 +19,19 @@ public class FTPHelper
     private static final String ftpSite = "ftp.reverteddesigns.com";
     private static final String baseFP = "/wineData/";
     
+    /**
+     * 
+     */
     public FTPHelper()
     {
         client = new FTPClient();
     }
     
+    /**
+     * Gets the InputStream from the correct file on the ftp server
+     * @param filepath
+     * @return  the InputStream to the file on the ftp server.
+     */
     public static InputStream getFTPInputStream( String filepath )
     {
         client = new FTPClient();
@@ -56,6 +64,11 @@ public class FTPHelper
         return null;
     }
     
+    /**
+     * Gets a BufferedWriter to the file on the ftp server
+     * @param filepath
+     * @return a BufferedWriter to the file on the ftp server
+     */
     private static BufferedWriter getFTPBufferedWriter( String filepath )
      {
         client = new FTPClient();
@@ -87,6 +100,11 @@ public class FTPHelper
         return null;
     }
     
+    /**
+     * Appends str to the end of the file at filepath on the ftp server.
+     * @param filepath
+     * @param str
+     */
     public static void appendToFile( String filepath, String str )
     {
         String append = "";
@@ -111,6 +129,11 @@ public class FTPHelper
         }        
     }
     
+    /**
+     * Loads a cellar from a file on the ftp server
+     * @param filepath
+     * @return a Cellar that is populated with the file on the ftp server.
+     */
     public static Cellar readCellarFromFile( String filepath )
     {
         InputStream is = getFTPInputStream( baseFP + filepath );
@@ -124,6 +147,11 @@ public class FTPHelper
         
     }
     
+    /**
+     * Writes the contents of a cellar to a file on the ftp server
+     * @param filepath
+     * @param myCellar
+     */
     public static void writeCellarToFile( String filepath, Cellar myCellar )
     {
         BufferedWriter bw = getFTPBufferedWriter( baseFP + filepath );
@@ -134,17 +162,5 @@ public class FTPHelper
         } catch (IOException ex) {
             Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    public static InputStream getAndroidInputStream( String filepath )
-    {
-        try {
-            URL url = new URL("ftp://"+ftpUser+":"+ftpPass+"@"+ftpSite+baseFP+filepath+";type=i");
-            URLConnection urlc = url.openConnection();
-            return urlc.getInputStream();
-        } catch (IOException ex) {
-            Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
     }
 }

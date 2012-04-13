@@ -14,23 +14,39 @@ public class Cellar {
 
     private ArrayList<Bottle> bottles;
 
+    /**
+     * 
+     */
     public Cellar() 
     {
         bottles = new ArrayList<Bottle>();
     }
     
+    /**
+     * 
+     * @param filepath
+     */
     public Cellar( String filepath )
     {
         bottles = new ArrayList<Bottle>();
         this.buildFromFile(filepath);
     }
     
+    /**
+     * 
+     * @param is
+     */
     public Cellar( InputStream is )
     {
         bottles = new ArrayList<Bottle>();
         this.buildFromFile( is );
     }
     
+    /**
+     * 
+     * @param btl
+     * @return
+     */
     public boolean addBottle( Bottle btl )
     {
         return bottles.add(btl);
@@ -57,6 +73,8 @@ public class Cellar {
      * @param year      the vintage of the wine
      * @param region    the region the wine is from
      * @param vineyard  the vineyard the wine is from
+     * @param rating 
+     * @param cm 
      * @return          true if successful
      */
     public boolean addBottle(String maker, String type, String year, String region, String vineyard, double rating, Comment cm) {
@@ -110,6 +128,8 @@ public class Cellar {
      * @param year      the new year
      * @param region    the new region
      * @param vineyard  the new vineyard
+     * @param rating
+     * @param cm  
      */
     public void editBottle(Bottle btl, String maker, String type, String year, String region, String vineyard, double rating, Comment cm) {
         //check for nulls before overwritting.
@@ -142,14 +162,26 @@ public class Cellar {
     }
 
     
+    /**
+     * Searches the cellar for bottles that meet the search criteria.
+     * @param maker search criteria
+     * @param type  search criteria
+     * @param year  search criteria
+     * @param region    search criteria
+     * @param vineyard  search criteria
+     * @param rating    search criteria
+     * @return  A 2D array used to update the table of wines with only those returned by the search
+     */
     public String[][] search(String maker, String type, String year, String region, String vineyard, String rating ) {
         Cellar temp = new Cellar();
         for ( Bottle btl : bottles )
         {
+            //for ever field - if no search criteria was entered, or the search criteria matches the value
             if( (maker.equals("") || maker.equals(btl.getMaker())) && ( year.equals("") || year.equals(btl.getYear())) 
                    && (region.equals("") || region.equals(btl.getRegion())) && (vineyard.equals("") || vineyard.equals(btl.getVineyard())) 
                     && (rating.equals("")  || rating.equals("" + btl.getRating()) ))
             {
+                //add the bottle
                 temp.addBottle(btl);
             }
         }
@@ -542,25 +574,19 @@ public class Cellar {
     }
     
     /**
-     * Builds an Array of {@link String}s that is used to export bottle info on the
-     * Android platform. The format of the string is "maker-type-year". The "-" is to
-     * be used to split the {@link String}.
-     * @return an array of {@link String}s
+     * CHANGED FROM ORIGINAL FUNCTIONALITY.
+     * Returns the ArrayList of bottles so the Android platform may display them.
+     * @return the ArrayList of bottles
      */
-    public String[] toAndroidStringArray()
+    public ArrayList<Bottle> toAndroidStringArray()
     {
-        int i = 0;
-        String[] result = new String[bottles.size()];
-        
-        for ( Bottle btl : bottles )
-        {
-            result[i] = btl.getMaker() + "-" + btl.getType() + "-" + btl.getYear();
-            i++;
-        }
-        
-        return result;
+        return bottles;
     }
     
+    /**
+     * Fills the cellar with bottles from the file located at the filepath.
+     * @param filepath  the filepath to the file.
+     */
     public void buildFromFile( String filepath )
     {
         try 
@@ -574,7 +600,9 @@ public class Cellar {
             while ( scan.hasNext() )
             {
                 curLine = scan.nextLine();
+                //split the fields
                 fields = curLine.split(",");
+                //split the comments
                 if (fields[6].contains(";"))
                 {
                 	comments = fields[6].split(";");
@@ -583,7 +611,9 @@ public class Cellar {
                 {
                 	comments = new String[] { fields[6] };
                 }
+                //add the new bottle
                 btl = new Bottle( fields[0], fields[1], fields[2], fields[3], fields[4], Double.parseDouble(fields[5]), null );
+                //attach comments to the new bottle
                 for ( String cm : comments )
                 {
                     String[] arr = cm.split( "-" );
@@ -599,6 +629,10 @@ public class Cellar {
         }
     }
     
+    /**
+     * Fills the cellar with the bottles from the InputStream
+     * @param in    the InputStream that contains bottles
+     */
     public void buildFromFile( InputStream in )
     {
         
@@ -610,7 +644,9 @@ public class Cellar {
             while ( scan.hasNext() )
             {
                 curLine = scan.nextLine();
+                //split the fields
                 fields = curLine.split(",");
+                //split the comments
                 if (fields[6].contains(";"))
                 {
                 	comments = fields[6].split(";");
@@ -619,12 +655,9 @@ public class Cellar {
                 {
                 	comments = new String[] { fields[6] };
                 }
+                //add the new bottle
                 btl = new Bottle( fields[0], fields[1], fields[2], fields[3], fields[4], Double.parseDouble(fields[5]), null );
-                for ( String cm : comments )
-                {
-                    String[] arr = cm.split( "-" );
-                    btl.addComment(new Comment( arr[0], arr[1], arr[2]));
-                }
+                //attach comments to the new bottle
                 bottles.add(btl);
             }
             scan.close();

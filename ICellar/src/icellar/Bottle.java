@@ -47,6 +47,8 @@ public class Bottle
      * @param year      the vintage of the wine
      * @param region    the region the wine is from; Enter null if not available
      * @param vineyard  the vineyard the wine is from; Enter null if not available
+     * @param rating    the rating given to the wine
+     * @param cm        a comment about the wine
      */
     public Bottle ( String maker, String type, String year, String region, String vineyard, double rating, Comment cm )
     {
@@ -129,6 +131,11 @@ public class Bottle
         return this.comments.add( new Comment ( comment, user ) );
     }
     
+    /**
+     * Adds a comment to the bottle
+     * @param cm
+     * @return
+     */
     public boolean addComment( Comment cm )
     {
         return this.comments.add( cm );
@@ -305,6 +312,10 @@ public class Bottle
         return rate.compareTo( compare );
     }
     
+    /**
+     * Gets the last entered comment about a bottle
+     * @return  the latest comment
+     */
     public Comment getLatestComment()
     {
         if ( comments.size() > 0 )
