@@ -541,7 +541,7 @@ public class Cellar {
         return result;
     }
     
-    private void buildFromFile( String filepath )
+    public void buildFromFile( String filepath )
     {
         try 
         {
@@ -579,7 +579,7 @@ public class Cellar {
         }
     }
     
-    private void buildFromFile( InputStream in )
+    public void buildFromFile( InputStream in )
     {
         
             Scanner scan = new Scanner( in );
