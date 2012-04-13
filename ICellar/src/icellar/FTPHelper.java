@@ -74,7 +74,7 @@ public class FTPHelper
                 System.exit(1);
             }
             client.login(ftpUser, ftpPass, "reverteddesignscom");
-            return new BufferedWriter ( new OutputStreamWriter ( client.storeFileStream(filepath) ) );
+            return new BufferedWriter ( new OutputStreamWriter ( client.storeFileStream( filepath) ) );
         } catch (UnknownHostException ex)
         {
             System.out.println(ex);
@@ -134,5 +134,17 @@ public class FTPHelper
         } catch (IOException ex) {
             Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static InputStream getAndroidInputStream( String filepath )
+    {
+        try {
+            URL url = new URL("ftp://"+ftpUser+":"+ftpPass+"@"+ftpSite+baseFP+filepath+";type=i");
+            URLConnection urlc = url.openConnection();
+            return urlc.getInputStream();
+        } catch (IOException ex) {
+            Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

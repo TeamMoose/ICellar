@@ -32,7 +32,8 @@ public class ClubCellar extends Cellar
     
     public ClubCellar( InputStream is )
     {
-        
+        bottles = new ArrayList<ClubBottle>();
+        this.buildFromFile( is );
     }
     
     public boolean addBottle( ClubBottle btl )
@@ -553,7 +554,7 @@ public class ClubCellar extends Cellar
         return result;
     }
 
-    private void buildFromFile( String filepath )
+    public void buildFromFile( String filepath )
     {
         try 
         {

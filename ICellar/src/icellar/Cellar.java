@@ -541,6 +541,26 @@ public class Cellar {
         return result;
     }
     
+    /**
+     * Builds an Array of {@link String}s that is used to export bottle info on the
+     * Android platform. The format of the string is "maker-type-year". The "-" is to
+     * be used to split the {@link String}.
+     * @return an array of {@link String}s
+     */
+    public String[] toAndroidStringArray()
+    {
+        int i = 0;
+        String[] result = new String[bottles.size()];
+        
+        for ( Bottle btl : bottles )
+        {
+            result[i] = btl.getMaker() + "-" + btl.getType() + "-" + btl.getYear();
+            i++;
+        }
+        
+        return result;
+    }
+    
     public void buildFromFile( String filepath )
     {
         try 
@@ -608,6 +628,5 @@ public class Cellar {
                 bottles.add(btl);
             }
             scan.close();
-        
     }
 }
