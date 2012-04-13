@@ -1,17 +1,16 @@
 package icellar;
 
-import java.awt.EventQueue;
-import javax.swing.*;
+import javax.imageio.ImageIO;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.awt.*;
 import javax.swing.*;
+
 import java.io.*;
+import java.net.URL;
 
 
 public class iCellarGUI extends JFrame {
@@ -23,6 +22,8 @@ public class iCellarGUI extends JFrame {
     static String[][] curUser = new String[1][1];
     private static Cellar myCellar;
     private static JTabbedPane tabbedPane;
+    private static JButton btnSearch;
+    private static JButton btnUndoSearch;
 
 
 	public iCellarGUI() {
@@ -35,20 +36,20 @@ public class iCellarGUI extends JFrame {
 		contentPane.setLayout(null);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 48, 864, 503);
+		tabbedPane.setBounds(10, 67, 864, 484);
 		contentPane.add(tabbedPane);
 
 		JScrollPane scrollPane = new JScrollPane();
 		tabbedPane.addTab("My Cellar", null, scrollPane, null);
 
-                InportAccount fileReader = new InportAccount();
+        InportAccount fileReader = new InportAccount();
 
-                File curFile = new File(new File("wineData/Login/curLogin.txt").getAbsolutePath());
+        File curFile = new File(new File("wineData/Login/curLogin.txt").getAbsolutePath());
 
-                curUser = fileReader.fileReader(curFile);
-
-                myCellar = new Cellar("wineData/Users/" + curUser[0][0] + "Bottle.txt");
-                String[][] bottles = myCellar.toStringArray();
+        curUser = fileReader.fileReader(curFile);
+        
+        myCellar = new Cellar("wineData/Users/" + curUser[0][0] + "Bottle.txt");
+        String[][] bottles = myCellar.toStringArray();
 
 		String[] columnHeaders = {"Maker",
                 "Type",
@@ -77,6 +78,88 @@ public class iCellarGUI extends JFrame {
 		scrollPane.setViewportView(table);
 
 		//Add Group tabs
+		File curFile2 = new File(new File("wineData/Users/" + curUser[0][0] + ".txt").getAbsolutePath());
+        
+        try{
+            
+            String[] wineclubs = new String[10];
+            String[] usersWineclub = new String[10];
+            
+            FileInputStream fstream = new FileInputStream(curFile2);
+
+            DataInputStream in = new DataInputStream(fstream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String stringLine;
+            
+            br.readLine();
+            br.readLine();
+            br.readLine();
+            br.readLine();
+            br.readLine();
+            
+            stringLine = br.readLine();
+            
+            wineclubs = stringLine.split(",");
+            
+            int i = 1;
+            while(wineclubs.length > i){
+                
+            	scrollPane = new JScrollPane();
+                tabbedPane.addTab(wineclubs[i], null, scrollPane, null);
+                
+                File curFile3 = new File(new File("wineData/Wineclubs/" + wineclubs[i] + ".txt").getAbsolutePath());
+                
+                FileInputStream fstream2 = new FileInputStream(curFile3);
+
+                DataInputStream in2 = new DataInputStream(fstream2);
+                BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
+                
+                br2.readLine();
+                br2.readLine();
+                br2.readLine();
+                br2.readLine();
+                
+                stringLine = br2.readLine();
+                
+                usersWineclub = stringLine.split(",");
+                
+                int j = 1;
+                Cellar temp = new Cellar();
+                
+                while(usersWineclub.length > j){
+                    
+                    temp.buildFromFile("wineData/Users/" + usersWineclub[j] + "Bottle.txt");                    
+                    j++;                            
+                }
+                
+                bottles = temp.toStringArray();
+
+                table = new JTable(bottles, columnHeaders);
+                table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                lsm = table.getSelectionModel();
+                lsm.addListSelectionListener(new ListSelectionListener() {
+                        public void valueChanged(ListSelectionEvent e) {
+                                ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+                                if (lsm.isSelectionEmpty()) {
+                                        selectedRow = -1;
+                                }
+                                else {
+                                        selectedRow = lsm.getMinSelectionIndex();
+                                }
+                        }
+                });
+                table.setAutoCreateRowSorter(true);
+                scrollPane.setViewportView(table);
+                
+                
+                i++;                        
+            }
+        }
+        
+        catch (Exception e){//Catch exception if any
+            
+            System.err.println("Error: " + e.getMessage());
+        }
 
 		JButton btnAddBottle = new JButton("Add Bottle");
 		btnAddBottle.addActionListener(new ActionListener() {
@@ -96,7 +179,7 @@ public class iCellarGUI extends JFrame {
 		btnManageClubs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					wineClubMenuGUI frame = new wineClubMenuGUI();
+					wineClubMenuGUI frame = new wineClubMenuGUI(myCellar);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -152,7 +235,7 @@ public class iCellarGUI extends JFrame {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						iCellarGUI.updateJTable();
+						iCellarGUI.updateJTable(myCellar.toStringArray());
 					}
 				}
 			}
@@ -160,7 +243,7 @@ public class iCellarGUI extends JFrame {
 		btnRemoveBottle.setBounds(621, 11, 117, 23);
 		contentPane.add(btnRemoveBottle);
 
-		JButton btnSearch = new JButton("Search");
+		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -192,13 +275,18 @@ public class iCellarGUI extends JFrame {
 		});
 		btnEditBottle.setBounds(494, 37, 117, 23);
 		contentPane.add(btnEditBottle);
+		
+		JLabel lblIcellar = new JLabel("iCellar");
+		lblIcellar.setFont(new Font("Tahoma", Font.BOLD, 24));
+		lblIcellar.setBounds(10, 11, 152, 41);
+		contentPane.add(lblIcellar);
 	}
 	
-	public static void updateJTable()
+	public static void updateJTable(String[][] bottles)
 	{
 		contentPane.remove(tabbedPane);
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 48, 864, 503);
+		tabbedPane.setBounds(10, 67, 864, 484);
 		contentPane.add(tabbedPane);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -209,9 +297,6 @@ public class iCellarGUI extends JFrame {
         File curFile = new File(new File("wineData/Login/curLogin.txt").getAbsolutePath());
 
         curUser = fileReader.fileReader(curFile);
-
-        myCellar = new Cellar("wineData/Users/" + curUser[0][0] + "Bottle.txt");
-        String[][] bottles = myCellar.toStringArray();
 
 		String[] columnHeaders = {"Maker",
                 "Type",
@@ -239,5 +324,103 @@ public class iCellarGUI extends JFrame {
 		scrollPane.setViewportView(table);
 
 		//Add Group tabs
+		
+        File curFile2 = new File(new File("wineData/Users/" + curUser[0][0] + ".txt").getAbsolutePath());
+        
+        try{
+            
+            String[] wineclubs = new String[10];
+            String[] usersWineclub = new String[10];
+            
+            FileInputStream fstream = new FileInputStream(curFile2);
+
+            DataInputStream in = new DataInputStream(fstream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String stringLine;
+            
+            br.readLine();
+            br.readLine();
+            br.readLine();
+            br.readLine();
+            br.readLine();
+            
+            stringLine = br.readLine();
+            
+            wineclubs = stringLine.split(",");
+            
+            int i = 1;
+            while(wineclubs.length > i){
+                
+            	scrollPane = new JScrollPane();
+                tabbedPane.addTab(wineclubs[i], null, scrollPane, null);
+                
+                File curFile3 = new File(new File("wineData/Wineclubs/" + wineclubs[i] + ".txt").getAbsolutePath());
+                
+                FileInputStream fstream2 = new FileInputStream(curFile3);
+
+                DataInputStream in2 = new DataInputStream(fstream2);
+                BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
+                
+                br2.readLine();
+                br2.readLine();
+                br2.readLine();
+                br2.readLine();
+                
+                stringLine = br2.readLine();
+                
+                usersWineclub = stringLine.split(",");
+                
+                int j = 1;
+                Cellar temp = new Cellar();
+                
+                while(usersWineclub.length > j){
+                    
+                    temp.buildFromFile("wineData/Users/" + usersWineclub[j] + "Bottle.txt");                    
+                    j++;                            
+                }
+                
+                bottles = temp.toStringArray();
+
+                table = new JTable(bottles, columnHeaders);
+                table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                lsm = table.getSelectionModel();
+                lsm.addListSelectionListener(new ListSelectionListener() {
+                        public void valueChanged(ListSelectionEvent e) {
+                                ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+                                if (lsm.isSelectionEmpty()) {
+                                        selectedRow = -1;
+                                }
+                                else {
+                                        selectedRow = lsm.getMinSelectionIndex();
+                                }
+                        }
+                });
+                table.setAutoCreateRowSorter(true);
+                scrollPane.setViewportView(table);
+                
+                
+                i++;                        
+            }
+        }
+        
+        catch (Exception e){//Catch exception if any
+            
+            System.err.println("Error: " + e.getMessage());
+        }     
+	}
+	
+	public static void replaceSearchButton() {
+		contentPane.remove(btnSearch);
+		btnUndoSearch = new JButton("Undo Search");
+		btnUndoSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				iCellarGUI.updateJTable(myCellar.toStringArray());
+				contentPane.remove(btnUndoSearch);
+				contentPane.add(btnSearch);
+			}
+		});
+		btnUndoSearch.setBounds(621, 37, 117, 23);
+		contentPane.add(btnUndoSearch);
 	}
 }
+

@@ -1,18 +1,6 @@
 package icellar;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
@@ -230,7 +218,7 @@ public class mainmenuGUI extends JFrame {
                             else{
 
                                 int i = 0;
-                                while(accounts[0][i].equals(textField_2.getText()) == false){//gose to each account breaks if there is a repeated username
+                                while(accounts[0][i].equals(textField_2.getText()) == false){//goes to each account breaks if there is a repeated username
 
                                     if((accounts[0][i+1] == null)&&(accounts[0][i].equals(textField_2.getText()) == false)){//makes sure the current one is not a repeat
 
@@ -258,6 +246,11 @@ public class mainmenuGUI extends JFrame {
 		});
 		btnSignUp.setBounds(264, 193, 89, 23);
 		contentPane.add(btnSignUp);
+		
+		JLabel lblIcellar = new JLabel("iCellar");
+		lblIcellar.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblIcellar.setBounds(10, 11, 106, 23);
+		contentPane.add(lblIcellar);
 	}
 }
 
@@ -394,6 +387,7 @@ class InportUserAccount{//reads all the current users in wineData/Account.txt
                  i++;
 
              }
+             
              return wordList;
         }
 
@@ -413,9 +407,7 @@ class CurSession{//replaces wineData/Login/curLogin.txt with the current users u
         BufferedWriter bw = null;
 
         try {
-
             File curFile = new File(new File("wineData/Login/curLogin.txt").getAbsolutePath());
-
             curFile.delete();
             curFile.createNewFile();
 

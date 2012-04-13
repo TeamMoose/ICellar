@@ -1,11 +1,9 @@
 package icellar;
 
-import java.awt.EventQueue;
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
 
 public class searchInventoryGUI extends JFrame {
@@ -101,6 +99,11 @@ public class searchInventoryGUI extends JFrame {
 		JButton btnSaveAndExit = new JButton("Search");
 		btnSaveAndExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//Rewrite table
+				iCellarGUI.updateJTable(myCellar.search(textField.getText(), textField_1.getText(), textField_2.getText(),
+						textField_3.getText(), textField_4.getText(), textField_5.getText()));
+				iCellarGUI.replaceSearchButton();
+				frame.dispose();
 			}
 		});
 		btnSaveAndExit.setBounds(72, 240, 117, 43);

@@ -1,12 +1,6 @@
 package icellar;
 
-import java.awt.EventQueue;
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
@@ -179,7 +173,7 @@ public class editBottleGUI extends JFrame {
 					e.printStackTrace();
 				}
 				
-				iCellarGUI.updateJTable();
+				iCellarGUI.updateJTable(myCellar.toStringArray());
 				frame.dispose();
 			}
 		});

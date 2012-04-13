@@ -1,12 +1,6 @@
 package icellar;
 
-import java.awt.EventQueue;
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
@@ -21,37 +15,35 @@ public class userProfileGUI extends JFrame {
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
-        String[][] accounts = new String[1][1];
-        String[][] curUser = new String[1][1];
-        String[][] userInfo = new String[1][1];
-        JLabel label = new JLabel("---------");
-        JLabel label_1 = new JLabel("--------");
-        JLabel label_2 = new JLabel("--------");
-        JLabel label_3 = new JLabel("--------");
-        JLabel label_4 = new JLabel("--------");
+    String[][] accounts = new String[1][1];
+    String[][] curUser = new String[1][1];
+    String[][] userInfo = new String[1][1];
+    JLabel label = new JLabel("---------");
+    JLabel label_1 = new JLabel("--------");
+    JLabel label_2 = new JLabel("--------");
+    JLabel label_3 = new JLabel("--------");
+    JLabel label_4 = new JLabel("--------");
 
 	/**
 	 * Create the frame.
 	 */
 	public userProfileGUI(iCellarGUI pf) {
 
+        File curFile = new File(new File("wineData/Login/curLogin.txt").getAbsolutePath());
+        ImportAccount fileReader = new ImportAccount();
 
-                
-                File curFile = new File(new File("wineData/Login/curLogin.txt").getAbsolutePath());
-                ImportAccount fileReader = new ImportAccount();
+        curUser = fileReader.fileReader(curFile);
 
-                curUser = fileReader.fileReader(curFile);
+        ImportAccount fileReader2 = new ImportAccount();
+        File curFile2 = new File(new File("wineData/Account.txt").getAbsolutePath());
 
-                ImportAccount fileReader2 = new ImportAccount();
-                File curFile2 = new File(new File("wineData/Account.txt").getAbsolutePath());
-
-                accounts = fileReader2.fileReader(curFile2);
+        accounts = fileReader2.fileReader(curFile2);
 
 
-                File curFile3 = new File(new File("wineData/Users/" + curUser[0][0] + ".txt").getAbsolutePath());
-                ImportAccount fileReader3 = new ImportAccount();
+        File curFile3 = new File(new File("wineData/Users/" + curUser[0][0] + ".txt").getAbsolutePath());
+        ImportAccount fileReader3 = new ImportAccount();
 
-                userInfo = fileReader3.fileReader(curFile3);
+        userInfo = fileReader3.fileReader(curFile3);
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame = this;		
@@ -164,8 +156,12 @@ public class userProfileGUI extends JFrame {
 				frame.dispose();
 				prevFrame.dispose();
 				
-
 				try {
+					File curFile = new File(new File("wineData/Login/curLogin.txt").getAbsolutePath());
+					DataOutputStream os = new DataOutputStream( new FileOutputStream(curFile,false));
+					os.writeChars("");
+		            curFile.delete();
+		            curFile.createNewFile();
 					mainmenuGUI frame2 = new mainmenuGUI();
 					frame2.setVisible(true);
 				} catch (Exception e) {
@@ -196,18 +192,12 @@ public class userProfileGUI extends JFrame {
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 
-                
-
-                label.setText(userInfo[0][2].substring(userInfo[0][2].indexOf(" ")));
-                label_1.setText(userInfo[0][3].substring(userInfo[0][3].indexOf(" ")));
-                label_2.setText(userInfo[0][0].substring(userInfo[0][0].indexOf(" ")));
-                label_3.setText(userInfo[0][1].substring(userInfo[0][1].indexOf(" ")));
-                label_4.setText(userInfo[0][4].substring(userInfo[0][4].indexOf(" ")));
-
-
-
+        label.setText(userInfo[0][2].substring(userInfo[0][2].indexOf(" ")));
+        label_1.setText(userInfo[0][3].substring(userInfo[0][3].indexOf(" ")));
+        label_2.setText(userInfo[0][0].substring(userInfo[0][0].indexOf(" ")));
+        label_3.setText(userInfo[0][1].substring(userInfo[0][1].indexOf(" ")));
+        label_4.setText(userInfo[0][4].substring(userInfo[0][4].indexOf(" ")));
 	}
-
 }
 
 class ImportAccount{//reads all the current users in wineData/Account.txt
@@ -225,12 +215,13 @@ class ImportAccount{//reads all the current users in wineData/Account.txt
              BufferedReader br = new BufferedReader(new InputStreamReader(in));
              String stringLine;
 
-             while ((stringLine = br.readLine()) != null)   {
-
+             while (wordList[0].length > i)   {
+            	 stringLine = br.readLine();
                  wordList[0][i] = stringLine;
                  i++;
 
              }
+
              return wordList;
         }
 
@@ -261,9 +252,6 @@ class UpdateUserInfo{
 
             bw.flush();
             bw.close();
-
-
-
 
         }
          catch (IOException e) {//Catch exception if any

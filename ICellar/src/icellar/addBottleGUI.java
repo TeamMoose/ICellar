@@ -1,12 +1,6 @@
 package icellar;
 
-import java.awt.EventQueue;
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
@@ -128,12 +122,36 @@ public class addBottleGUI extends JFrame {
                                 File curFile = new File(new File("wineData/Login/curLogin.txt").getAbsolutePath());
 
                                 curUser = fileReader.fileReader(curFile);
+                                Bottle btl = new Bottle(textField.getText(), textField_1.getText(), textField_2.getText());
+                                if(!textField_3.getText().equals("")) btl.setVineyard(textField_3.getText());
+                                if(!textField_4.getText().equals("")) btl.setRegion(textField_4.getText());
+                                if(!textField_5.getText().equals("")) btl.setRating(Double.parseDouble(textField_5.getText()));
+                                if(!textField_6.getText().equals("")) btl.addComment(new Comment(textField_6.getText(), curUser[0][0]));
+                                else {
+                                	btl.addComment(null);
+                                }
+                                //Bottle btl = new Bottle(textField.getText(), textField_1.getText(), textField_2.getText(),
+                                		//textField_3.getText(), textField_4.getText(), Double.parseDouble(textField_5.getText()), new Comment(textField_6.getText(), curUser[0][0]));
+                                myCellar.addBottle(btl);
+                                try {
+                					File curFile2 = new File(new File("wineData/Users/" + curUser[0][0] + "Bottle.txt").getAbsolutePath());
+                					
+                					BufferedWriter bw = null;
+                					
+                					curFile2.delete();
+                					curFile2.createNewFile();
+                					
+                					bw = new BufferedWriter( new FileWriter( curFile2, true) );
+                					bw.write(myCellar.toString());
+                					bw.newLine();
+                					bw.flush();
+                					bw.close();						
+                					
+                				} catch (IOException e) {
+                					e.printStackTrace();
+                				}
 
-                                UpdateBottleInfo update = new UpdateBottleInfo();
-                                
-                                Bottle btl = new Bottle(textField.getText(), textField_1.getText(), textField_2.getText(), textField_3.getText(), textField_4.getText(), Double.parseDouble(textField_5.getText()), new Comment(textField_6.getText(), curUser[0][0]));
-                                update.update(btl.toString(), curUser[0][0], myCellar);
-                                iCellarGUI.updateJTable();
+                                iCellarGUI.updateJTable(myCellar.toStringArray());
                                 frame.dispose();
                             }
 
@@ -146,30 +164,4 @@ public class addBottleGUI extends JFrame {
 		lblIndicatesA.setBounds(62, 50, 152, 14);
 		contentPane.add(lblIndicatesA);
 	}
-}
-
-class UpdateBottleInfo{
-
-    public void update (String bottle, String user, Cellar myCellar){
-
-        BufferedWriter bw = null;
-
-         try {
-
-            File curFile = new File(new File("wineData/Users/" + user + "Bottle.txt").getAbsolutePath());
-
-            bw = new BufferedWriter(new FileWriter(curFile, true));
-
-            bw.write(bottle + "\n");
-
-            bw.flush();
-            bw.close();
-            
-            myCellar = new Cellar("wineData/Users/" + user + "Bottle.txt");
-
-        }
-         catch (IOException e) {//Catch exception if any
-            System.err.println("Error: " + e.getMessage());
-        }
-    }
 }
