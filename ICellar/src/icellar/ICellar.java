@@ -26,17 +26,18 @@ public class ICellar
         // TODO code application logic here
         String filepath = "test.txt";
         
-        /*BufferedWriter write = FTPHelper.getFTPOutputStream(filepath);
+        BufferedWriter write = FTPHelper.getFTPOutputStream(filepath);
         try {
-            write.append("Shii!\n");
+            write.append("Hi Colton\n");
+            write.flush();
             write.close();
         } catch (IOException ex) {
             Logger.getLogger(ICellar.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        }
         
        
         
-       /* InputStream in = FTPHelper.getFTPInputStream(filepath);
+        /*InputStream in = FTPHelper.getFTPInputStream(filepath);
         Scanner scan = new Scanner( in );
         
         while ( scan.hasNext() )
@@ -48,7 +49,7 @@ public class ICellar
         } catch (IOException ex) {
             Logger.getLogger(ICellar.class.getName()).log(Level.SEVERE, null, ex);
         }*/
-        Cellar cellar = new Cellar ("resources/bottles.txt");
-        System.out.println(cellar.getBottle(0));
+       // Cellar cellar = new Cellar ("resources/bottles.txt");
+        //System.out.println(cellar.getBottle(0));
     }
 }

@@ -1,0 +1,6 @@
+email: gja7@nau.edu
+name: 456
+userName: gja8
+password: howdy
+bDay: 9/26/1986
+Wineclubs: | WINE 

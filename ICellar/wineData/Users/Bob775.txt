@@ -1,0 +1,7 @@
+email: BobJon@gmail.com
+firstName: Bob
+lastName: Jameson
+userName: Bob775
+password: Password321
+bDay: 8-3-1973
+Wineclubs: | Some Wine Club 

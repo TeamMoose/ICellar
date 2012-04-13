@@ -25,12 +25,6 @@ public class Cellar {
         this.buildFromFile(filepath);
     }
     
-    public Cellar ( InputStream input )
-    {
-        bottles = new ArrayList<Bottle>();
-        this.buildFromFile(input);
-    }
-    
     public boolean addBottle( Bottle btl )
     {
         return bottles.add(btl);
@@ -111,24 +105,34 @@ public class Cellar {
      * @param region    the new region
      * @param vineyard  the new vineyard
      */
-    public void editBottle(Bottle btl, String maker, String type, String year, String region, String vineyard) {
+    public void editBottle(Bottle btl, String maker, String type, String year, String region, String vineyard, double rating, Comment cm) {
         //check for nulls before overwritting.
         Bottle bt = bottles.get(bottles.indexOf(btl));
         if (maker != null) {
             bt.setMaker(maker);
         }
-        if (type != null) {
+        if (type != null && !type.equals("")) {
             bt.setType(type);
         }
-        if (year != null) {
+        if (year != null && !year.equals("")) {
             bt.setYear(year);
         }
-        if (region != null) {
+        if (region != null && !region.equals("")) {
             bt.setRegion(region);
         }
-        if (vineyard != null) {
+        if (vineyard != null && !vineyard.equals("")) {
             bt.setVineyard(vineyard);
         }
+        if (rating != -1)
+        {
+        	bt.setRating(rating);
+        }
+        if (cm != null)
+        {
+        	bt.addComment(cm);
+        }
+        
+        
     }
 
     /**
@@ -426,7 +430,7 @@ public class Cellar {
      */
     public void sortByRating() {
         Object[] arr = bottles.toArray();
-        arr = quicksortRating(arr, arr.length / 2);
+        arr = quicksortVineyard(arr, arr.length / 2);
         bottles = new ArrayList<Bottle>();
         //populate the new ArrayList with the elements in the correct order
         for (Object o : arr) {
@@ -531,26 +535,6 @@ public class Cellar {
         return result;
     }
     
-    /**
-     * Builds an Array of {@link String}s that is used to export bottle info on the
-     * Android platform. The format of the string is "maker-type-year". The "-" is to
-     * be used to split the {@link String}.
-     * @return an array of {@link String}s
-     */
-    public String[] toAndroidStringArray()
-    {
-        int i = 0;
-        String[] result = new String[bottles.size()];
-        
-        for ( Bottle btl : bottles )
-        {
-            result[i] = btl.getMaker() + "-" + btl.getType() + "-" + btl.getYear();
-            i++;
-        }
-        
-        return result;
-    }
-    
     private void buildFromFile( String filepath )
     {
         try 
@@ -565,8 +549,14 @@ public class Cellar {
             {
                 curLine = scan.nextLine();
                 fields = curLine.split(",");
-                comments = fields[6].split(";");
-                
+                if (fields[6].contains(";"))
+                {
+                	comments = fields[6].split(";");
+                }
+                else
+                {
+                	comments = new String[] { fields[6] };
+                }
                 btl = new Bottle( fields[0], fields[1], fields[2], fields[3], fields[4], Double.parseDouble(fields[5]), null );
                 for ( String cm : comments )
                 {
@@ -575,6 +565,7 @@ public class Cellar {
                 }
                 bottles.add(btl);
             }
+            scan.close();
         } 
         catch (FileNotFoundException ex) 
         {
@@ -582,9 +573,10 @@ public class Cellar {
         }
     }
     
-    private void buildFromFile( InputStream input )
+    private void buildFromFile( InputStream in )
     {
-            Scanner scan = new Scanner( input );
+        
+            Scanner scan = new Scanner( in );
             String curLine;
             String[] fields;
             String[] comments;
@@ -593,8 +585,14 @@ public class Cellar {
             {
                 curLine = scan.nextLine();
                 fields = curLine.split(",");
-                comments = fields[6].split(";");
-                
+                if (fields[6].contains(";"))
+                {
+                	comments = fields[6].split(";");
+                }
+                else
+                {
+                	comments = new String[] { fields[6] };
+                }
                 btl = new Bottle( fields[0], fields[1], fields[2], fields[3], fields[4], Double.parseDouble(fields[5]), null );
                 for ( String cm : comments )
                 {
@@ -603,5 +601,7 @@ public class Cellar {
                 }
                 bottles.add(btl);
             }
+            scan.close();
+        
     }
 }

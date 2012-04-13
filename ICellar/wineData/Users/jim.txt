@@ -1,0 +1,7 @@
+email: someone@something.com
+firstName: Jim
+lastName: Jimson
+userName: jim
+password: jim
+bDay: Bday
+Wineclubs: 

@@ -1,0 +1,6 @@
+email: frog
+name: 1
+userName: bob
+password: melon
+bDay: 2
+Wineclubs: 

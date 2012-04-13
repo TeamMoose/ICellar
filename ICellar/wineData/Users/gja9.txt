@@ -1,0 +1,6 @@
+email: 1
+name: 1
+userName: gja9
+password: howdy
+bDay: 1
+Wineclubs: 

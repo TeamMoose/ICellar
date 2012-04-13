@@ -1,0 +1,5 @@
+wineName: Some Wine Club
+description: idc
+password: Password
+Admin: diveblk
+users: diveblk | Bob775 

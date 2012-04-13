@@ -1,0 +1,7 @@
+email: Email@something.com
+firstName: foo
+lastName: foooo
+userName: foo775
+password: Password
+bDay: Bday
+Wineclubs: | WINE 

@@ -14,8 +14,8 @@ public class FTPHelper
 {
     public static FTPClient client;
     public static final String urlProtocol = "ftp://";
-    public static final String ftpUser = "iCellar:";
-    public static final String ftpPass = "1cellar!!";
+    public static final String ftpUser = "iCellar";
+    public static final String ftpPass = "1cellar!";
     public static final String ftpSite = "ftp.reverteddesigns.com";
     public static final String ftpEnd = ";type=i";
     public static final String baseFilepath = "/iCellar/";
@@ -24,11 +24,6 @@ public class FTPHelper
     {
         client = new FTPClient();
     }
-    
-   /* public boolean writeToFile( String filepath )
-    {
-        
-    }*/
     
     public static InputStream getFTPInputStream( String filepath )
     {
@@ -48,7 +43,7 @@ public class FTPHelper
                 System.err.println("FTP server refused connection.");
                 System.exit(1);
             }
-            Boolean logged = client.login(ftpUser, ftpPass);
+            Boolean logged = client.login(ftpUser, ftpPass, "reverteddesignscom");
             reply = client.getReplyCode();
             client.changeToParentDirectory();
             FTPFile[] directs = client.listDirectories();
@@ -57,7 +52,7 @@ public class FTPHelper
             {
                 System.out.println(str);
             }
-            return client.retrieveFileStream(baseFilepath + filepath);
+            return client.retrieveFileStream(filepath);
         } catch (UnknownHostException ex)
         {
             System.out.println(ex);
@@ -70,12 +65,31 @@ public class FTPHelper
         return null;
     }
     
-    public  BufferedWriter getFTPOutputStream( String filepath )
-    {
+    public static BufferedWriter getFTPOutputStream( String filepath )
+     {
+        client = new FTPClient();
         try {
-            URL url = new URL( filepath + ftpEnd );
-            URLConnection urlc = url.openConnection();
-            return new BufferedWriter( new OutputStreamWriter( urlc.getOutputStream() ) );
+            int reply;
+            client.connect(ftpSite);
+
+            // After connection attempt, you should check the reply code to verify
+            // success.
+            reply = client.getReplyCode();
+
+            if (!FTPReply.isPositiveCompletion(reply))
+            {
+                client.disconnect();
+                System.err.println("FTP server refused connection.");
+                System.exit(1);
+            }
+            client.login(ftpUser, ftpPass, "reverteddesignscom");
+            return new BufferedWriter ( new OutputStreamWriter ( client.storeFileStream(filepath) ) );
+        } catch (UnknownHostException ex)
+        {
+            System.out.println(ex);
+        }
+            catch (SocketException ex) {
+            Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(FTPHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
