@@ -141,13 +141,18 @@ public class Cellar {
      * @param btl   a copy of the {@link Bottle} that is being searched for.
      * @return      a {@link Bottle} if a match is found, else null.
      */
-    public Bottle search(Bottle btl) {
-        int index = bottles.indexOf(btl);
-        if (index >= 0) {
-            return bottles.get(index);
-        } else {
-            return null;
+    public String[][] search(String maker, String type, String year, String region, String vineyard, double rating ) {
+        Cellar temp = new Cellar();
+        for ( Bottle btl : bottles )
+        {
+            if( (!maker.equals("") && maker.equals(btl.getMaker())) && ( !year.equals("") && year.equals(btl.getYear())) 
+                   && (!region.equals("") && region.equals(btl.getRegion())) && (!vineyard.equals("") && vineyard.equals(btl.getVineyard())) 
+                    && (rating != -1 && rating == btl.getRating() ))
+            {
+                temp.addBottle(btl);
+            }
         }
+        return temp.toStringArray();
     }
 
     /**

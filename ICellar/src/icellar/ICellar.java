@@ -26,7 +26,7 @@ public class ICellar
         // TODO code application logic here
         String filepath = "test.txt";
         
-        BufferedWriter write = FTPHelper.getFTPOutputStream(filepath);
+        /*BufferedWriter write = FTPHelper.getFTPOutputStream(filepath);
         try {
             write.append("Hi Colton\n");
             write.flush();
@@ -34,7 +34,7 @@ public class ICellar
         } catch (IOException ex) {
             Logger.getLogger(ICellar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        */
        
         
         /*InputStream in = FTPHelper.getFTPInputStream(filepath);
